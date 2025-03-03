@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Process {
     private final int id;
     private final int arrivalTime;
@@ -6,18 +8,15 @@ public class Process {
     private int startTime = -1; // Indicates not started, to be set only once
     private int endTime = 0;
 
-    private int lastExecutionTime;
-    private int totalWaitTime = 0;
 
-    public Process(int num, int arrivalTime, int serviceTime) {
-        this.id = num;
+    public Process(int id, int arrivalTime, int serviceTime) {
+        this.id = id;
         this.arrivalTime = arrivalTime;
         this.serviceTime = serviceTime;
-        this.remainingServiceTime = serviceTime; //Set remainingServiceTime to the starting service time
-        this.lastExecutionTime = arrivalTime; // Set the lastExecutionTime equal to the arrivalTime
+        this.remainingServiceTime = serviceTime; // Initially, remaining service time equals service time
     }
 
-    // Create getter methods for all the class fields
+    // Getters
     public int getId() {
         return id;
     }
@@ -42,19 +41,12 @@ public class Process {
         return endTime;
     }
 
-    public int getTotalWaitTime() {
-        return totalWaitTime;
-    }
-
-    public int getLastExecutionTime() {
-        return lastExecutionTime;
-    }
 
     public int getTurnAroundTime() {
         return this.endTime - this.arrivalTime;
     }
 
-    // Setter methods for the class fields
+    // Setters
     public void setRemainingServiceTime(int remainingServiceTime) {
         this.remainingServiceTime = remainingServiceTime;
     }
@@ -69,9 +61,56 @@ public class Process {
         this.endTime = endTime;
     }
 
+    public static int[] getInterArrivalTimes() {
+        int high = 10;
+        int low = 5;
 
+        Random rand = new Random();
+        int[] interArrivalTimes = new int[99];
+        int[] arrivalTimes = new int[100];
 
-    public void setLastExecutionTime(int lastExecutionTime) {
-        this.lastExecutionTime = lastExecutionTime;
+        for (int i = 0; i < interArrivalTimes.length; i++) {
+            int result = rand.nextInt(high - low) + low;
+            interArrivalTimes[i] = result;
+        }
+
+        return interArrivalTimes;
+
     }
+
+    public static int[] getArrivalTimes(int[] interArrivalTimes) {
+
+        int[] arrivalTimes = new int[100];
+
+        int a = 0;
+        arrivalTimes[0] = a;
+
+        for (int i = 1; i < interArrivalTimes.length; i++) {
+            a += interArrivalTimes[i];
+            arrivalTimes[i] = a;
+        }
+
+        arrivalTimes[interArrivalTimes.length] = arrivalTimes[interArrivalTimes.length-1] + 7;
+
+        return arrivalTimes;
+    }
+
+    public static int[] getServiceTimes() {
+
+        int[] serviceTimes = new int[100];
+
+        int high = 8;
+        int low = 4;
+
+        Random rand = new Random();
+
+        for (int i = 0; i < serviceTimes.length; i++) {
+            int result = rand.nextInt(high - low) + low;
+            serviceTimes[i] = result;
+        }
+
+        return serviceTimes;
+    }
+
+
 }
